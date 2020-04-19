@@ -1,0 +1,9 @@
+{
+  "name": "apollo-server-playground",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/wild-mouse/apollo-server-playground",
+  "author": "Tsukasa Noguchi <wildmouse0813@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
