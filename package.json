@@ -5,5 +5,18 @@
   "repository": "https://github.com/wild-mouse/apollo-server-playground",
   "author": "Tsukasa Noguchi <wildmouse0813@gmail.com>",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "dependencies": {
+    "apollo-server-express": "^2.12.0",
+    "awesome-typescript-loader": "^5.2.1",
+    "source-map-loader": "^0.2.4"
+  },
+  "scripts": {
+    "start": "nodemon ./src/index.ts"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.3",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
+  }
 }
