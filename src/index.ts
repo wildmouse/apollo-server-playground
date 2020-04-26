@@ -2,32 +2,40 @@ import * as express from 'express'
 import {ApolloServer, gql} from 'apollo-server-express'
 import {PubSub} from 'graphql-subscriptions'
 import {createServer} from 'http'
+import {makeSchema, mutationField, queryField, queryType, stringArg} from "nexus"
 
 const pubsub = new PubSub()
 
+const Query = queryField("hello", {
+    type: "String",
+    resolve: () => "Hello, world!"
+})
+
+const Mutation = mutationField("say", {
+    type: "String",
+    args: { name: stringArg() },
+    resolve: (parent, args) => {
+        const greeting = `Hello, ${args.name}!`
+        pubsub.publish("newGreeting", greeting)
+        return "true"
+    }
+})
+
+const schema = makeSchema({
+    types: [Query, Mutation],
+    outputs: {
+        schema: __dirname + '/generated/schema.graphql',
+        typegen: __dirname + '/generated/typings.ts'
+    }
+})
+
 const typeDefs = gql`
-    type Query {
-        hello: String!
-    }
-    type Mutation {
-        say(name: String!): String!
-    }
     type Subscription {
         newGreeting: String!
     }
 `
 
 const resolvers = {
-    Query: {
-        hello: () => "Hello, world!",
-    },
-    Mutation: {
-        say: (parent, args) => {
-            const greeting = `Hello, ${args.name}!`
-            pubsub.publish("newGreeting", greeting)
-            return true
-        }
-    },
     Subscription: {
         newGreeting: {
             subscribe: () => {
@@ -40,7 +48,7 @@ const resolvers = {
     }
 }
 
-const server = new ApolloServer({typeDefs, resolvers})
+const server = new ApolloServer({schema})
 
 const app = express()
 server.applyMiddleware({app})

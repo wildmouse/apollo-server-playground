@@ -10,6 +10,7 @@
     "apollo-server-express": "^2.12.0",
     "awesome-typescript-loader": "^5.2.1",
     "graphql-subscriptions": "^1.1.0",
+    "nexus": "^0.12.0",
     "source-map-loader": "^0.2.4",
     "subscriptions-transport-ws": "^0.9.16"
   },
