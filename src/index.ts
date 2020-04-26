@@ -2,7 +2,7 @@ import * as express from 'express'
 import {ApolloServer, gql} from 'apollo-server-express'
 import {PubSub} from 'graphql-subscriptions'
 import {createServer} from 'http'
-import {makeSchema, mutationField, queryField, queryType, stringArg} from "nexus"
+import {makeSchema, mutationField, queryField, queryType, stringArg, subscriptionField} from "nexus"
 
 const pubsub = new PubSub()
 
@@ -21,8 +21,18 @@ const Mutation = mutationField("say", {
     }
 })
 
+const Subscription = subscriptionField("newGreeting", {
+    type: "String",
+    subscribe: () => {
+        return pubsub.asyncIterator("newGreeting")
+    },
+    resolve: (root, args, context, info) => {
+        return info.rootValue
+    }
+})
+
 const schema = makeSchema({
-    types: [Query, Mutation],
+    types: [Query, Mutation, Subscription],
     outputs: {
         schema: __dirname + '/generated/schema.graphql',
         typegen: __dirname + '/generated/typings.ts'

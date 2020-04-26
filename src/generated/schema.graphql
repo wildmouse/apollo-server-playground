@@ -9,3 +9,7 @@ type Mutation {
 type Query {
   hello: String!
 }
+
+type Subscription {
+  newGreeting: String!
+}
